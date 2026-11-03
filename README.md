@@ -10,7 +10,7 @@ One VM, one container, persistent world data and a player allowlist. The contain
 - [server.properties.example](server.properties.example): the two allowlist settings to merge into the server's generated configuration.
 - [.gitignore](.gitignore): excludes common local runtime data and credentials.
 
-The article describes Ubuntu 24.04 on an OCI Ampere A1 ARM64 VM with Podman 4.9.3 and cgroup v2. These files have been checked against the published configuration and the [Podman 4.9.3 Quadlet documentation](https://docs.podman.io/en/v4.9.3/markdown/podman-systemd.unit.5.html); they have not been deployment-tested as part of creating this repository.
+The article describes Ubuntu 24.04 on an OCI Ampere A1 ARM64 VM with Podman 4.9.3 and cgroup v2. These files have been checked against the published configuration and the [Podman 4.9.3 Quadlet documentation](https://docs.podman.io/en/v4.9.3/markdown/podman-systemd.unit.5.html);
 
 ## Before starting
 
@@ -51,7 +51,7 @@ Adjust these values for your host:
 | Setting | Article value | What to check |
 | --- | --- | --- |
 | Volume | /mnt/oraclevdb2/podmanvolumes/minecraft_1:/minecraft:Z | The host directory must be on the intended mounted disk and writable by the rootless account. The :Z label is for SELinux. |
-| MaxMemory | 8960 | The image's Java heap setting, not a container memory limit. Leave RAM for the OS, native allocations and other processes; reduce this for smaller VMs. |
+| MaxMemory | 4096 | The image's Java heap setting, not a container memory limit. Leave RAM for the OS, native allocations and other processes; reduce this for smaller VMs. |
 | TZ | Europe/Berlin | Your time zone. |
 | ScheduleRestart | 3:30 | The upstream image's scheduled restart setting. |
 | Image / Pull | :latest / newer | Mutable image: service starts may pull updates. Back up before updates; pin a tested digest if reproducibility matters. |
@@ -61,7 +61,9 @@ After preparing the writable data directory, install the file and create the net
 ```bash
 mkdir -p ~/.config/containers/systemd
 cp mc.container ~/.config/containers/systemd/mc.container
+
 podman network create minecraft_default
+
 systemctl --user daemon-reload
 systemctl --user start mc.service
 ```
@@ -99,9 +101,9 @@ The Quadlet publishes the article's ports:
 | --- | --- | --- |
 | Java Edition | TCP | 25565 |
 | Bedrock / Geyser | UDP | 19132 |
-| Additional mapping retained from the article | TCP | 19132 |
+| Bedrock / Geyser | TCP | 19132 |
 
-Standard Bedrock game traffic uses UDP. The extra TCP 19132 mapping is retained for fidelity to the article; open it externally only if your setup needs it. Match the required ports in the OCI Security List or NSG and the host firewall. Restrict source ranges where practical. A public subnet also needs the appropriate Internet Gateway route and public endpoint. Publishing container ports does not configure OCI ingress. SSH access is separate.
+Match the required ports in the OCI Security List or NSG and the host firewall. Restrict source ranges where practical. A public subnet also needs the appropriate Internet Gateway route and public endpoint. Publishing container ports does not configure OCI ingress. SSH access is separate.
 
 ## Operations
 
