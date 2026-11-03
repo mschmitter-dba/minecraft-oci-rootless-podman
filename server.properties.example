@@ -1,0 +1,3 @@
+# Merge these settings into the generated server.properties; this is not a complete file.
+white-list=true
+enforce-whitelist=true
