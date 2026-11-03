@@ -1,0 +1,13 @@
+# Runtime data, player identities, keys and local overrides do not belong here.
+minecraft-data/
+minecraft_1/
+backups/
+.env
+.env.*
+*.pem
+*.key
+server.properties
+whitelist.json
+ops.json
+usercache.json
+.DS_Store
