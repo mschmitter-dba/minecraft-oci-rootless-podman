@@ -10,9 +10,9 @@ PodmanArgs=--interactive
 Pull=newer
 # Env
 Environment=TZ=Europe/Berlin
-Environment=MaxMemory=8960
+Environment=MaxMemory=4096
 Environment=ScheduleRestart=3:30
-# Volume
+# Volume - Make your choice:
 Volume=/mnt/oraclevdb2/podmanvolumes/minecraft_1:/minecraft:Z
 # Network, must exist already
 Network=minecraft_default
