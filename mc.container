@@ -1,0 +1,27 @@
+[Unit]
+Description=Minecraft (Podman Quadlet)
+Wants=network-online.target
+After=network-online.target
+[Container]
+Image=docker.io/05jchambers/legendary-minecraft-geyser-floodgate:latest
+ContainerName=mc1
+PodmanArgs=--tty
+PodmanArgs=--interactive
+Pull=newer
+# Env
+Environment=TZ=Europe/Berlin
+Environment=MaxMemory=8960
+Environment=ScheduleRestart=3:30
+# Volume
+Volume=/mnt/oraclevdb2/podmanvolumes/minecraft_1:/minecraft:Z
+# Network, must exist already
+Network=minecraft_default
+# Ports
+PublishPort=25565:25565/tcp
+PublishPort=19132:19132/udp
+PublishPort=19132:19132/tcp
+[Service]
+Restart=always
+TimeoutStartSec=900
+[Install]
+WantedBy=default.target
